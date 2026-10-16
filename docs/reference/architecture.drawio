@@ -1,0 +1,109 @@
+<mxfile host="Electron" agent="generate_shared_terraform_modules.py" version="24.7.17">
+  <diagram id="page-architecture" name="architecture">
+    <mxGraphModel dx="1400" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="c2" value="terraform-aws-ssm-bastion — architecture" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontSize=20;fontStyle=1;fontColor=#232F3E;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="1300" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="c3" value="An EC2 instance with no inbound access, no key pair and no public IP, reached only through Systems Manager." style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=11;fontColor=#545B64;spacing=4;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="40" y="50" width="1354" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="c4" value="&lt;b&gt;Inputs&lt;/b&gt;&lt;br&gt;&lt;b&gt;name&lt;/b&gt; — required&lt;br&gt;&lt;b&gt;vpc_id&lt;/b&gt; — required&lt;br&gt;&lt;b&gt;subnet_id&lt;/b&gt; — required&lt;br&gt;instance_type = &quot;t4g.nano&quot;&lt;br&gt;ami_id = null&lt;br&gt;ami_ssm_parameter_name = Amazon Linux 2023 arm64 (public SSM parameter)&lt;br&gt;user_data = null&lt;br&gt;root_volume_size = 8&lt;br&gt;root_volume_kms_key_arn = null&lt;br&gt;egress_cidr_blocks = [&quot;0.0.0.0/0&quot;]&lt;br&gt;tags = {}" style="rounded=1;absoluteArcSize=1;arcSize=14;whiteSpace=wrap;html=1;fillColor=#EAF3FB;strokeColor=#147EBA;dashed=0;fontSize=10;fontColor=#232F3E;align=left;verticalAlign=top;spacing=6;spacingTop=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="100" width="280" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="c5" value="&lt;b&gt;Outputs&lt;/b&gt;&lt;br&gt;instance_id&lt;br&gt;private_ip&lt;br&gt;security_group_id&lt;br&gt;iam_role_name&lt;br&gt;iam_role_arn&lt;br&gt;instance_profile_name" style="rounded=1;absoluteArcSize=1;arcSize=14;whiteSpace=wrap;html=1;fillColor=#EEF6E8;strokeColor=#7AA116;dashed=0;fontSize=10;fontColor=#232F3E;align=left;verticalAlign=top;spacing=6;spacingTop=1;" vertex="1" parent="1">
+          <mxGeometry x="1320" y="100" width="294" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="c6" value="&lt;b&gt;IAM the module creates&lt;/b&gt;&lt;br&gt;aws_iam_role.bastion — trusted by ec2.amazonaws.com.&lt;br&gt;One managed policy, AmazonSSMManagedInstanceCore: the SSM Agent registers, takes Session Manager, port-forwarding and Run Command traffic over ssmmessages and ec2messages, and reports inventory; it also allows ssm:GetParameter and ssm:GetParameters on the account's parameters.&lt;br&gt;Nothing else." style="rounded=1;absoluteArcSize=1;arcSize=14;whiteSpace=wrap;html=1;fillColor=#FDF2F4;strokeColor=#DD344C;dashed=0;fontSize=10;fontColor=#232F3E;align=left;verticalAlign=top;spacing=6;spacingTop=1;" vertex="1" parent="1">
+          <mxGeometry x="1320" y="231" width="294" height="176" as="geometry" />
+        </mxCell>
+        <mxCell id="c7" value="&lt;b&gt;Requirements&lt;/b&gt;&lt;br&gt;Terraform ≥ 1.9.0 · hashicorp/aws ≥ 6.0&lt;br&gt;No provider block: the caller's provider sets the account, the Region and default_tags." style="rounded=1;absoluteArcSize=1;arcSize=14;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#545B64;dashed=0;fontSize=10;fontColor=#232F3E;align=left;verticalAlign=top;spacing=6;spacingTop=1;" vertex="1" parent="1">
+          <mxGeometry x="1320" y="423" width="294" height="76" as="geometry" />
+        </mxCell>
+        <mxCell id="c8" value="Only when … — created only when the condition holds" style="rounded=1;absoluteArcSize=1;arcSize=14;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#879196;dashed=1;verticalAlign=top;align=left;spacingLeft=8;spacingTop=2;fontStyle=2;fontSize=10;fontColor=#232F3E;container=1;collapsible=0;pointerEvents=0;" vertex="1" parent="1">
+          <mxGeometry x="1320" y="515" width="294" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="c9" value="Grey — not created by the module: the caller's, or AWS's" style="rounded=1;absoluteArcSize=1;arcSize=14;whiteSpace=wrap;html=1;fillColor=#F1F3F3;strokeColor=#5A6C86;dashed=0;fontSize=10;fontColor=#232F3E;align=left;verticalAlign=top;spacing=6;spacingTop=1;" vertex="1" parent="1">
+          <mxGeometry x="1320" y="559" width="294" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="c10" value="Region (the caller's provider)" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=0;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_region;strokeColor=#00A4A6;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#147EBA;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="340" y="100" width="950" height="660" as="geometry" />
+        </mxCell>
+        <mxCell id="c11" value="Caller's VPC (vpc_id)" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=0;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_vpc;strokeColor=#8C4FFF;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#8C4FFF;dashed=0;" vertex="1" parent="1">
+          <mxGeometry x="370" y="150" width="580" height="430" as="geometry" />
+        </mxCell>
+        <mxCell id="c12" value="Caller's private subnet (subnet_id)" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=0;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_security_group;strokeColor=#00A4A6;fillColor=#E6F6F7;verticalAlign=top;align=left;spacingLeft=30;fontColor=#147EBA;dashed=0;" vertex="1" parent="c11">
+          <mxGeometry x="20" y="50" width="540" height="360" as="geometry" />
+        </mxCell>
+        <mxCell id="c13" value="&lt;b&gt;aws_security_group.bastion&lt;/b&gt; · {name}-sg&lt;br&gt;no inbound rules · all outbound to egress_cidr_blocks" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=0;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_security_group;strokeColor=#DD344C;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#DD344C;dashed=0;" vertex="1" parent="c12">
+          <mxGeometry x="20" y="60" width="500" height="270" as="geometry" />
+        </mxCell>
+        <mxCell id="c14" value="&lt;b&gt;aws_instance.bastion&lt;/b&gt; · {name}&lt;br&gt;t4g.nano · Amazon Linux 2023 arm64&lt;br&gt;no public IP · IMDSv2 required&lt;br&gt;encrypted gp3 root volume, 8 GiB&lt;br&gt;user_data · AMI updates ignored" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#ED7100;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.ec2;labelPosition=right;verticalLabelPosition=middle;align=left;verticalAlign=middle;spacingLeft=2;" vertex="1" parent="c13">
+          <mxGeometry x="40" y="80" width="64" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="c15" value="&lt;b&gt;aws_iam_role.bastion&lt;/b&gt; · {name}&lt;br&gt;trusted by ec2.amazonaws.com" style="outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#DD344C;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.role;labelPosition=right;verticalLabelPosition=middle;align=left;verticalAlign=middle;spacingLeft=2;" vertex="1" parent="1">
+          <mxGeometry x="990" y="170" width="48" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="c16" value="&lt;b&gt;AmazonSSMManagedInstanceCore&lt;/b&gt;&lt;br&gt;aws_iam_role_policy_attachment.ssm_core" style="outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#DD344C;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.permissions;labelPosition=right;verticalLabelPosition=middle;align=left;verticalAlign=middle;spacingLeft=2;" vertex="1" parent="1">
+          <mxGeometry x="990" y="270" width="48" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="c17" value="&lt;b&gt;aws_iam_instance_profile.bastion&lt;/b&gt;&lt;br&gt;{name}" style="outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#DD344C;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.long_term_security_credential;labelPosition=right;verticalLabelPosition=middle;align=left;verticalAlign=middle;spacingLeft=2;" vertex="1" parent="1">
+          <mxGeometry x="990" y="370" width="48" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="c18" value="&lt;b&gt;Caller's aws_iam_role_policy&lt;/b&gt; on iam_role_name: whatever the bastion must reach" style="rounded=1;absoluteArcSize=1;arcSize=14;whiteSpace=wrap;html=1;fillColor=#F1F3F3;strokeColor=#5A6C86;fontSize=11;fontColor=#232F3E;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="985" y="460" width="280" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="c19" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;strokeColor=#545B64;strokeWidth=1.2;fontSize=10;fontColor=#232F3E;labelBackgroundColor=#FFFFFF;jettySize=auto;orthogonalLoop=1;dashed=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="c16" target="c15">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c20" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;strokeColor=#545B64;strokeWidth=1.2;fontSize=10;fontColor=#232F3E;labelBackgroundColor=#FFFFFF;jettySize=auto;orthogonalLoop=1;dashed=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="c15" target="c17">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="975" y="194" />
+              <mxPoint x="975" y="394" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c21" value="instance profile" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;strokeColor=#545B64;strokeWidth=1.2;fontSize=10;fontColor=#232F3E;labelBackgroundColor=#FFFFFF;jettySize=auto;orthogonalLoop=1;dashed=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="c17" target="c13">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c22" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;strokeColor=#545B64;strokeWidth=1.2;fontSize=10;fontColor=#232F3E;labelBackgroundColor=#FFFFFF;jettySize=auto;orthogonalLoop=1;dashed=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="c18" target="c15">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1278" y="490" />
+              <mxPoint x="1278" y="194" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c23" value="&lt;b&gt;AWS Systems Manager&lt;/b&gt;&lt;br&gt;Session Manager · Run Command" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#E7157B;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.systems_manager;labelPosition=right;verticalLabelPosition=middle;align=left;verticalAlign=middle;spacingLeft=2;" vertex="1" parent="1">
+          <mxGeometry x="640" y="650" width="48" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="c24" value="&lt;b&gt;Operator or pipeline&lt;/b&gt;&lt;br&gt;aws ssm start-session or send-command; IAM decides who may" style="rounded=1;absoluteArcSize=1;arcSize=14;whiteSpace=wrap;html=1;fillColor=#F1F3F3;strokeColor=#5A6C86;fontSize=11;fontColor=#232F3E;" vertex="1" parent="1">
+          <mxGeometry x="370" y="640" width="220" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="c25" value="&lt;b&gt;SSM public parameter&lt;/b&gt;&lt;br&gt;ami_ssm_parameter_name, read at plan&lt;br&gt;when ami_id is null" style="outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.parameter_store;labelPosition=right;verticalLabelPosition=middle;align=left;verticalAlign=middle;spacingLeft=2;" vertex="1" parent="1">
+          <mxGeometry x="990" y="630" width="48" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="c26" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;strokeColor=#545B64;strokeWidth=1.2;fontSize=10;fontColor=#232F3E;labelBackgroundColor=#FFFFFF;jettySize=auto;orthogonalLoop=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="c24" target="c23">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c27" value="the agent connects out on 443" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;strokeColor=#545B64;strokeWidth=1.2;fontSize=10;fontColor=#232F3E;labelBackgroundColor=#FFFFFF;jettySize=auto;orthogonalLoop=1;dashed=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="c14" target="c23">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c28" value="AMI ID" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;strokeColor=#545B64;strokeWidth=1.2;fontSize=10;fontColor=#232F3E;labelBackgroundColor=#FFFFFF;jettySize=auto;orthogonalLoop=1;dashed=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.85;entryDx=0;entryDy=0;" edge="1" parent="1" source="c25" target="c13">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="960" y="654" />
+              <mxPoint x="960" y="489.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c29" value="Source: main.tf, variables.tf and outputs.tf in this repository, as of the version this diagram was drawn for. Edit architecture.drawio in draw.io and export architecture.png beside it (File › Export as › PNG)." style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=11;fontColor=#545B64;spacing=4;fontSize=10;fontColor=#879196;" vertex="1" parent="1">
+          <mxGeometry x="40" y="772" width="1574" height="22" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
