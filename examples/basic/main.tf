@@ -1,18 +1,16 @@
-# The smallest useful call. Examples are complete root configurations: they
-# have a provider block and call the module from the working copy, so CI
-# validates the code in this repository.
+# The smallest useful call: one bastion in an existing private subnet whose
+# route table sends 0.0.0.0/0 to a NAT gateway. Examples call the module from
+# the working copy so CI validates this repository's code; a real caller pins a
+# Git source (README.md, "Usage").
 
 provider "aws" {
   region = var.region
 }
 
-module "example" {
-  # A real caller uses a pinned Git source instead; see README.md "Usage".
+module "ssm_bastion" {
   source = "../.."
 
-  name = var.name
-
-  tags = {
-    Environment = "example"
-  }
+  name      = var.name
+  vpc_id    = var.vpc_id
+  subnet_id = var.subnet_id
 }
