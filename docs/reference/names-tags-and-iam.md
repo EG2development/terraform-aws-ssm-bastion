@@ -93,7 +93,7 @@ for port forwarding), `ssm:TerminateSession` on your own sessions, and
 
 | | Minimum | Why |
 | --- | --- | --- |
-| Terraform | 1.9.0 | The floor shared by this family of modules |
+| Terraform | 1.16.0 | The floor shared by this family of modules |
 | `hashicorp/aws` | 6.0 | First release of the current major; the module uses no newer argument |
 | AWS CLI (your machine) | 2, with the Session Manager plugin | `aws ssm start-session` |
 

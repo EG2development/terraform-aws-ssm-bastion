@@ -7,7 +7,7 @@ exist.
 
 ## Before you start
 
-- Terraform 1.9 or later, and credentials for a sandbox AWS account that may create
+- Terraform 1.16 or later, and credentials for a sandbox AWS account that may create
   EC2 instances, security groups, IAM roles and instance profiles, and start
   Session Manager sessions.
 - The AWS CLI version 2 and the Session Manager plugin.
@@ -39,7 +39,7 @@ Create an empty directory and a file `main.tf` in it:
 
 ```hcl
 terraform {
-  required_version = ">= 1.9.0"
+  required_version = ">= 1.16.0"
   required_providers {
     aws = {
       source  = "hashicorp/aws"
