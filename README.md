@@ -61,20 +61,20 @@ it), never to a branch. Run `terraform init` after changing `source`.
 ## Requirements
 
 | Name | Version |
-| ---- | ------- |
+|------|---------|
 | terraform | >= 1.9.0 |
 | aws | >= 6.0 |
 
 ## Providers
 
 | Name | Version |
-| ---- | ------- |
+|------|---------|
 | aws | >= 6.0 |
 
 ## Resources
 
 | Name | Type |
-| ---- | ---- |
+|------|------|
 | [aws_iam_instance_profile.bastion](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_instance_profile) | resource |
 | [aws_iam_role.bastion](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role_policy_attachment.ssm_core](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
@@ -84,7 +84,7 @@ it), never to a branch. Run `terraform init` after changing `source`.
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-| ---- | ----------- | ---- | ------- | :------: |
+|------|-------------|------|---------|:--------:|
 | name | Name of the bastion, for example "payments-prod-bastion". The instance, IAM role and instance profile are named `{name}`; the security group's name starts with `{name}-`. docs/reference/names-tags-and-iam.md lists every derived name. | `string` | n/a | yes |
 | subnet\_id | ID of the private subnet the instance runs in. The subnet needs a route to the Systems Manager endpoints: a NAT gateway, or interface VPC endpoints for ssm, ssmmessages and ec2messages. Without one the instance never registers with Systems Manager and cannot be reached. | `string` | n/a | yes |
 | vpc\_id | ID of the VPC the bastion's security group is created in. It must be the VPC of subnet\_id. | `string` | n/a | yes |
@@ -100,7 +100,7 @@ it), never to a branch. Run `terraform init` after changing `source`.
 ## Outputs
 
 | Name | Description |
-| ---- | ----------- |
+|------|-------------|
 | iam\_role\_arn | ARN of the instance's IAM role, for resource policies (KMS keys, secrets, buckets) that admit the bastion. |
 | iam\_role\_name | Name of the instance's IAM role. Attach your own policies to it to grant the bastion more than Systems Manager access. |
 | instance\_id | ID of the instance: the target of aws ssm start-session, port forwarding and Run Command. |
@@ -124,8 +124,9 @@ it), never to a branch. Run `terraform init` after changing `source`.
 
 ## Security scanning
 
-Checkov runs on every pull request. Three checks are skipped, in
-[`.github/workflows/ci.yml`](.github/workflows/ci.yml):
+Checkov runs on every pull request via
+[Static Analysis](.github/workflows/workflow.yml). Three AWS checks are skipped in
+[`configs/checkov.yml`](configs/checkov.yml):
 
 | Check | Why it is skipped |
 | --- | --- |
@@ -164,7 +165,8 @@ Semantic versions, tags `vMAJOR.MINOR.PATCH`, created by release-please from
 Conventional Commit pull-request titles. Patch: a fix that changes no plan. Minor: a
 new optional input, output or off-by-default resource. Major: anything that can
 change or replace an existing caller's resources, or raise a minimum version.
-Details: [the standard](https://github.com/EG2development/terraform-module-standards/blob/main/docs/standard.md).
+For the contribution and release checks, see [`CONTRIBUTING.md`](CONTRIBUTING.md)
+and [the release workflow](.github/workflows/release-please.yml).
 
 ## Contributing and ownership
 

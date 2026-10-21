@@ -1,0 +1,29 @@
+---
+compact: true
+directory:
+  - .
+download-external-modules: false
+evaluate-variables: true
+framework: terraform
+output: cli
+quiet: true
+soft-fail: false
+skip-check:
+  - CKV_GCP_16 # Why don't we do this? https://jira.ons.gov.uk/browse/CATDE-1831
+  - CKV_GCP_41 # Impersonation is ok
+  - CKV_GCP_49 # Impersonation is ok
+  - CKV_GCP_62 # We are happy with current logs
+  - CKV_GCP_81 # We don't currently do CSEK
+  - CKV_GCP_117 # Basic roles are ok here
+  - CKV_TF_1 # Private modules don't need commit hash
+  - CKV_TF_2 # we use the same version pattern that checkov expects at present.
+  - CKV_GCP_124 # Skipping due to specific project constraints
+  - CKV_GCP_114 # Skipping public access prevention checks
+  - CKV_GCP_78 # Skipping cloud storage versioning checks
+  - CKV_GCP_33 # Skipping oslogin enforcement
+  - CKV_GCP_83 # Skipping PubSub CSEK requirement
+  - CKV2_GCP_10 # Skipping Cloud Function HTTP trigger security check
+  - CKV_AWS_126 # Detailed monitoring: billed per instance, no value for an idle bastion
+  - CKV_AWS_135 # EBS optimisation: on by default for current-generation types
+  - CKV_AWS_382 # Egress to 0.0.0.0/0: the SSM Agent needs it; egress_cidr_blocks narrows it
+summary-position: bottom
